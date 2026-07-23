@@ -14,5 +14,5 @@ export const site = {
     { name: 'LinkedIn', url: 'https://www.linkedin.com/in/jhavonei' },
     { name: 'Instagram', url: 'https://www.instagram.com/jhavonei' }
   ],
-  author: { habitat: 'REMOTE · EARTH', activeSince: '2026' }
+  author: { habitat: 'REMOTE · EARTH', activeSince: '2024' }
 } as const;
