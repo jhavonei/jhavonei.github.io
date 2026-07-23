@@ -11,8 +11,8 @@ export interface LilyPointCloud {
   count: number;
 }
 
-const PETAL_W = 0.34;
-const RECURVE = 0.55;
+const PETAL_W = 0.3;
+const RECURVE = 0.35;
 const STAMEN_Z = [0.0, 0.3, 0.5, 0.15]; // bezier z profile (arcs toward camera)
 
 function cubic(p0: number, p1: number, p2: number, p3: number, t: number): number {
@@ -44,20 +44,40 @@ export function buildLily(count = 50_000, seed = 7): LilyPointCloud {
     positions[i * 3] = x; positions[i * 3 + 1] = y; positions[i * 3 + 2] = z;
     grays[i] = g; filament[i] = f; i++;
   };
-  const j = () => (rng() - 0.5) * 0.012; // positional jitter
+  const j = () => (rng() - 0.5) * 0.005; // positional jitter (hairline, not fuzz)
 
-  // ── petals: six lanceolate recurved blades at 90° + k·60° ──
+  // ── petals: six lanceolate blades drawn as STROKES, not fill ──
+  // Sampling mimics the mockup's linework: bright edges + midrib + two side
+  // veins carry the form; a dim interior wash gives the pressed-flower body.
   for (let p = 0; p < nPetal; p++) {
     const k = p % 6;
     const th = (Math.PI / 2) + k * (Math.PI / 3);
     const dirX = Math.cos(th), dirY = Math.sin(th);
     const u = Math.pow(rng(), 0.7); // denser at base
     const w = PETAL_W * Math.sin(Math.PI * Math.min(u * 1.05, 1)) * (1 - 0.35 * u);
-    const v = (rng() * 2 - 1) * w * 0.5;
     const r = u * PETAL_LEN;
     const z = -RECURVE * u * u * (1.8 * u - 0.8); // lifts, then curls behind
-    put(dirX * r - dirY * v + j(), dirY * r + dirX * v + j(), z + j(),
-        0.55 + 0.35 * rng(), FILAMENT.PETALS);
+
+    const roll = rng();
+    let v: number, g: number;
+    if (roll < 0.4) {
+      // outline: both edges, razor-tight
+      v = (roll < 0.2 ? 1 : -1) * (w / 2) * (0.985 + 0.03 * rng());
+      g = 0.62 + 0.3 * rng();
+    } else if (roll < 0.52) {
+      // midrib
+      v = (rng() - 0.5) * w * 0.05;
+      g = 0.5 + 0.22 * rng();
+    } else if (roll < 0.68) {
+      // two side veins at quarter-width
+      v = (roll < 0.6 ? 1 : -1) * w * 0.25 * (0.92 + 0.16 * rng());
+      g = 0.42 + 0.2 * rng();
+    } else {
+      // faint interior wash
+      v = (rng() * 2 - 1) * w * 0.46;
+      g = 0.18 + 0.14 * rng();
+    }
+    put(dirX * r - dirY * v + j(), dirY * r + dirX * v + j(), z + j(), g, FILAMENT.PETALS);
   }
 
   // ── stamens: six bezier filaments + anther cluster at tip ──
@@ -70,26 +90,18 @@ export function buildLily(count = 50_000, seed = 7): LilyPointCloud {
       put(cubic(c.x[0], c.x[1], c.x[2], c.x[3], t) + j(),
           cubic(c.y[0], c.y[1], c.y[2], c.y[3], t) + j(),
           cubic(c.z[0], c.z[1], c.z[2], c.z[3], t) + j(),
-          0.7 + 0.3 * rng(), s);
+          0.85 + 0.15 * rng(), s);
     }
     for (let q = 0; q < nAnther; q++) {
-      const g = () => (rng() + rng() + rng() - 1.5) * 0.045; // approx gaussian
-      put(tips[s][0] + g(), tips[s][1] + g(), tips[s][2] + g(), 0.8 + 0.2 * rng(), s);
+      const g = () => (rng() + rng() + rng() - 1.5) * 0.03; // tight anther knot
+      put(tips[s][0] + g(), tips[s][1] + g(), tips[s][2] + g(), 0.85 + 0.15 * rng(), s);
     }
   }
 
-  // ── core + pollen haze ──
-  for (let q = i; i < count; ) {
-    const near = rng() < 0.5;
-    if (near) {
-      const g = () => (rng() + rng() - 1) * 0.09;
-      put(g(), g(), 0.1 + rng() * 0.15, 0.75 + 0.25 * rng(), FILAMENT.CORE);
-    } else {
-      const s = Math.floor(rng() * 6);
-      const g = () => (rng() - 0.5) * 0.5;
-      put(tips[s][0] * (0.7 + 0.3 * rng()) + g(), tips[s][1] * (0.7 + 0.3 * rng()) + g(),
-          tips[s][2] + g() * 0.3, 0.4 + 0.2 * rng(), FILAMENT.CORE);
-    }
+  // ── core: a small bright knot at the throat (no scatter fog) ──
+  while (i < count) {
+    const g = () => (rng() + rng() - 1) * 0.07;
+    put(g(), g(), 0.05 + rng() * 0.12, 0.7 + 0.25 * rng(), FILAMENT.CORE);
   }
 
   return { positions, grays, filament, tips, count };

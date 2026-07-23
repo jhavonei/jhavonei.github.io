@@ -29,7 +29,7 @@ describe('buildLily', () => {
   });
   it('keeps grays in a monochrome band', () => {
     for (let i = 0; i < 200; i++) {
-      expect(lily.grays[i]).toBeGreaterThanOrEqual(0.4);
+      expect(lily.grays[i]).toBeGreaterThanOrEqual(0.15);
       expect(lily.grays[i]).toBeLessThanOrEqual(1.0);
     }
   });

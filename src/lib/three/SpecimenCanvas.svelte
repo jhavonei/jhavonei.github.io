@@ -29,6 +29,18 @@
   } | null = $state(null);
   export function getApi() { return api; }
 
+  // Readiness gate: Three.js loads via async import, so parent calls can arrive
+  // before `api` exists. Every public method awaits readiness; cleanup resolves
+  // the gate too so awaiters never hang if the canvas dies first.
+  let readyResolve!: () => void;
+  const whenReady = new Promise<void>((r) => (readyResolve = r));
+  export async function assemble(ms?: number) { await whenReady; if (disposed) return; return api?.assemble(ms); }
+  export async function finishAssembly() { await whenReady; if (disposed) return; api?.finishAssembly(); }
+  export async function disintegrate(dir: [number, number], ms?: number) { await whenReady; if (disposed) return; return api?.disintegrate(dir, ms); }
+  export async function condense(dir: [number, number], ms?: number) { await whenReady; if (disposed) return; return api?.condense(dir, ms); }
+  export async function setFocus(fig: number | null) { await whenReady; if (disposed) return; api?.setFocus(fig); }
+  export async function flickerInvert() { await whenReady; if (disposed) return; api?.flickerInvert(); }
+
   const INK = { black: 0xc8c8c4, white: 0x1c1c1a } as const;
 
   onMount(() => {
@@ -78,8 +90,10 @@
       };
       const applyMode = () => {
         const dark = mode.current === 'black';
-        material.blending = dark ? THREE.NormalBlending : THREE.AdditiveBlending;
-        material.opacity = dark ? 1.0 : 0.8;
+        // NormalBlending in BOTH modes: additive dark-on-light sums past white
+        // and renders invisible — dark ink on light paper needs alpha blending.
+        material.blending = THREE.NormalBlending;
+        material.opacity = dark ? 1.0 : 0.85;
         material.color.setHex(dark ? INK.black : INK.white);
         material.needsUpdate = true;
       };
@@ -97,7 +111,7 @@
         });
 
       api = {
-        assemble: (ms = 1500) => startPhase('assembling', ms),
+        assemble: (ms = 1500) => { vel.fill(0); return startPhase('assembling', ms); },
         finishAssembly: () => { pos.set(orig); vel.fill(0); phase = 'idle'; phaseDone?.(); phaseDone = null; },
         disintegrate: (dir, ms = 700) => { phaseDir = dir; return startPhase('departing', ms); },
         condense: (dir, ms = 700) => {
@@ -123,6 +137,7 @@
           setTimeout(() => !disposed && applyMode(), 120);
         }
       };
+      readyResolve();
 
       const clock = new THREE.Clock();
       const ease = (t: number) => 1 - Math.pow(1 - t, 3);
@@ -156,7 +171,11 @@
               pos[k * 3 + 2] += (orig[k * 3 + 2] - pos[k * 3 + 2]) * 0.12;
             }
           }
-          if (raw >= 1) { if (phase === 'condensing') pos.set(orig); phase = 'idle'; phaseDone?.(); phaseDone = null; }
+          if (raw >= 1) {
+            if (phase === 'condensing') pos.set(orig);
+            vel.fill(0); // lerp phases ignore velocity — clear residuals or the bloom sheds a dust halo
+            phase = 'idle'; phaseDone?.(); phaseDone = null;
+          }
         } else if (phase === 'departing') {
           const raw = Math.min((now - phaseT0) / phaseMs, 1);
           for (let k = 0; k < n; k++) {
@@ -224,7 +243,7 @@
         host.contains(renderer.domElement) && host.removeChild(renderer.domElement);
       };
     })();
-    return () => { disposed = true; cleanup(); };
+    return () => { disposed = true; readyResolve(); cleanup(); };
   });
 </script>
 

@@ -19,3 +19,5 @@ Running log of intentional or forced deviations from the implementation plan.
 | 2026-07-23 | T27 | Deploy workflow present; push not executed | Owner will push after audit |
 | 2026-07-23 | spec §3.4 | **Owner decision:** cursor repulsion removed from hero idle physics; continuous `rotation.y = t*0.05` replaced with gentle ±0.1 rad sway | Dispersal made stamen nodes hard to click; bloom now holds form, callouts hold position. Supersedes the frozen-constants contract by owner order |
 | 2026-07-23 | spec §6.4 | Public email `hey@jhavonei.me` → `contact@jhavonei.me` | Owner decision |
+| 2026-07-23 | spec §3.4 | WHITE mode uses NormalBlending (not Additive per WovenLight) | Additive dark-on-light sums past white — the lily was invisible in WHITE. Defect fix |
+| 2026-07-23 | spec §3 | Petal sampling reworked from solid fill to stroke-drawn (edges + midrib + veins + dim wash); haze removed; velocities zeroed at phase boundaries | Fill sampling rendered as a fuzzy blob; stale velocities shed a dust halo after assembly. Verified via headless-browser screenshots |

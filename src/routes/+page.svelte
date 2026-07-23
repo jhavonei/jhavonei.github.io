@@ -16,7 +16,15 @@
   import { directionFor } from '$lib/config/routes';
   import { ROUTES } from '$lib/config/routes';
 
-  let canvas: { getApi: () => ReturnType<typeof SpecimenCanvas.prototype.getApi> } | undefined = $state();
+  interface CanvasHandle {
+    assemble: (ms?: number) => Promise<void>;
+    finishAssembly: () => Promise<void>;
+    disintegrate: (dir: [number, number], ms?: number) => Promise<void>;
+    condense: (dir: [number, number], ms?: number) => Promise<void>;
+    setFocus: (fig: number | null) => Promise<void>;
+    flickerInvert: () => Promise<void>;
+  }
+  let canvas: CanvasHandle | undefined = $state();
   let eclipseRef: { eclipse: (fn?: () => void) => Promise<void> } | undefined = $state();
   let tips: { x: number; y: number }[] = $state([]);
   let focused: number | null = $state(null);
@@ -36,10 +44,10 @@
     arrivedFromInterior = !!(from && from !== '/');
     if (!arrivedFromInterior) rite = 'paper';
     const un = transitions.registerDepart(async (dir) => {
-      await canvas?.getApi()?.disintegrate(dir);
+      await canvas?.disintegrate(dir);
     });
     if (arrivedFromInterior && from) {
-      requestAnimationFrame(() => canvas?.getApi()?.condense(directionFor(from)));
+      void canvas?.condense(directionFor(from));
     }
     return un;
   });
@@ -51,8 +59,8 @@
   <AssemblyRite
     enabled={!arrivedFromInterior}
     onphase={(p) => (rite = p)}
-    assemble={(ms) => canvas?.getApi()?.assemble(ms) ?? Promise.resolve()}
-    finish={() => canvas?.getApi()?.finishAssembly()} />
+    assemble={(ms) => canvas?.assemble(ms) ?? Promise.resolve()}
+    finish={() => void canvas?.finishAssembly()} />
   <EclipseDisc bind:this={eclipseRef} />
   {#if reduced || degraded}
     <StaticPlate ontips={(t) => (tips = t)} />
@@ -73,9 +81,9 @@
   <div class:dim={!visible(['callouts'])}>
     <Callouts
       {tips}
-      onfocus={(f) => { focused = f; canvas?.getApi()?.setFocus(f); }}
+      onfocus={(f) => { focused = f; void canvas?.setFocus(f); }}
       onnavigate={(path) => goto(path)}
-      oninvert={() => eclipseRef?.eclipse(() => canvas?.getApi()?.flickerInvert())} />
+      oninvert={() => eclipseRef?.eclipse(() => void canvas?.flickerInvert())} />
   </div>
   <!-- Chrome always in DOM: footer strip is the no-JS nav path -->
   <div class="chrome top" class:dim={!visible(['chrome', 'particles', 'rings', 'callouts'])}>

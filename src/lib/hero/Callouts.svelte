@@ -65,8 +65,10 @@
   .callouts { position: absolute; inset: 0; z-index: 2; }
   .callout {
     position: absolute; white-space: nowrap; padding: 10px 12px; /* enlarged hit area */
-    color: var(--ink-faint); background: transparent; border: none; cursor: pointer;
+    color: var(--ink); background: transparent; border: none; cursor: pointer;
     font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.14em;
+    /* paper-colored halo so labels stay legible over particles and ring text */
+    text-shadow: 0 0 4px var(--paper), 0 0 8px var(--paper), 0 0 14px var(--paper), 0 0 22px var(--paper);
   }
   .callout.hot, .callout:hover, .callout:focus-visible { color: var(--ink-strong); }
   /* no projected tip yet (pre-hydration / first frames): keep focusable, don't paint a stack in the corner */
