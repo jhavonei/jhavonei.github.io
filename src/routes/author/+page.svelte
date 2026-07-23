@@ -1,6 +1,6 @@
 <script lang="ts">
   import DocumentPage from '$lib/doc/DocumentPage.svelte';
-  import Belladonna from '$lib/plants/Belladonna.svelte';
+  import MiniSpecimen from '$lib/hero/MiniSpecimen.svelte';
   import { ROUTES } from '$lib/config/routes';
   import { site } from '$lib/config/site';
   import { bio, traits } from '$lib/config/copy';
@@ -19,7 +19,7 @@
           <text><textPath href="#aring">{(site.identityLine + ' · ').repeat(4)}</textPath></text>
         </g>
       </svg>
-      <div class="plantbox"><Belladonna size={200} /></div>
+      <div class="plantbox"><MiniSpecimen variant="aurata" size={220} /></div>
       {#each traits as t, i}
         <span class="trait label" style="top: {[8, 26, 50, 72, 88][i]}%; {i % 2 ? 'right: -4%' : 'left: -4%'}">{t}</span>
       {/each}

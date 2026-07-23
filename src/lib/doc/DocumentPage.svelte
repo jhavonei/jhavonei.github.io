@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { RouteDef } from '$lib/config/routes';
   import { openingLines } from '$lib/config/copy';
-  import { plants } from '$lib/plants';
+  import MiniSpecimen from '$lib/hero/MiniSpecimen.svelte';
   import HeaderRows from '$lib/chrome/HeaderRows.svelte';
   import FooterStrip from '$lib/chrome/FooterStrip.svelte';
   import Breadcrumb from '$lib/chrome/Breadcrumb.svelte';
@@ -11,7 +11,6 @@
     route: RouteDef; subtitle: string; description: string;
     children: import('svelte').Snippet;
   }>();
-  const Plant = $derived(plants[route.plant]);
 </script>
 
 <Seo title={route.title} {description} />
@@ -25,7 +24,7 @@
       <p class="label doc-sub">Fig.0{route.fig} · {subtitle}</p>
     </div>
     <figure class="guardian">
-      <Plant size={120} />
+      <MiniSpecimen variant={route.variant} size={120} />
       <figcaption class="label latin">{route.latin}</figcaption>
     </figure>
   </div>
