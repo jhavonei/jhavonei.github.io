@@ -39,6 +39,6 @@
 <div class="page" class:exhaling>{@render children()}</div>
 
 <style>
-  .page { min-height: 100vh; }
-  .exhaling { opacity: 0; transform: translateY(8px); transition: opacity 0.25s var(--ease-wipe), transform 0.25s var(--ease-wipe); }
+  .page { min-height: 100vh; transition: opacity 0.25s var(--ease-wipe), transform 0.25s var(--ease-wipe); }
+  .exhaling { opacity: 0; transform: translateY(8px); }
 </style>

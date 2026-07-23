@@ -98,7 +98,10 @@
       let phaseT0 = 0, phaseMs = 0, phaseDir: [number, number] = [0, 1];
       let phaseDone: (() => void) | null = null;
       const startPhase = (p: string, ms: number) =>
-        new Promise<void>((res) => { phase = p; phaseMs = ms; phaseT0 = performance.now(); phaseDone = res; });
+        new Promise<void>((res) => {
+          phaseDone?.(); // a superseded phase must release its awaiter
+          phase = p; phaseMs = ms; phaseT0 = performance.now(); phaseDone = res;
+        });
 
       api = {
         assemble: (ms = 1500) => startPhase('assembling', ms),

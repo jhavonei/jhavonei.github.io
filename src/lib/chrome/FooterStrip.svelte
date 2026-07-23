@@ -2,8 +2,8 @@
   import { ROUTES } from '$lib/config/routes';
   import { mode } from '$lib/systems/mode.svelte';
   import { page } from '$app/state';
-  import { toggleSound } from '$lib/systems/sound';
-  let on = $state(false);
+  import { isArmed, toggleSound } from '$lib/systems/sound';
+  let on = $state(isArmed());
 </script>
 
 <footer class="strip">

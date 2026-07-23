@@ -40,17 +40,23 @@
       href={ROUTES[fig - 1].path}
       class="callout label"
       class:hot={focusedFig === fig || armedFig === fig}
+      class:unplaced={!tips[fig]}
       style={off(fig)}
       onmouseenter={() => enter(fig)}
       onmouseleave={leave}
+      onfocus={() => enter(fig)}
+      onblur={leave}
       onclick={(e) => activate(e, fig)}>{label(fig)}</a>
   {/each}
   <button
     class="callout label inverter"
     class:hot={focusedFig === 0}
+    class:unplaced={!tips[0]}
     style={off(0)}
     onmouseenter={() => enter(0)}
     onmouseleave={leave}
+    onfocus={() => enter(0)}
+    onblur={leave}
     onclick={(e) => activate(e, 0)}
     aria-label="Invert to {mode.current === 'black' ? 'white' : 'black'} mode">Fig.00 — Invert ⇄</button>
 </div>
@@ -63,5 +69,7 @@
     font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.14em;
   }
   .callout.hot, .callout:hover, .callout:focus-visible { color: var(--ink-strong); }
+  /* no projected tip yet (pre-hydration / first frames): keep focusable, don't paint a stack in the corner */
+  .callout.unplaced { visibility: hidden; }
   .inverter { font-style: italic; }
 </style>

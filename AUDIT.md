@@ -69,6 +69,21 @@ npm run preview   # http://localhost:4173
 5. Confirm social handles in `site.ts`
 6. Replace placeholder work specimens
 
+## Review pass (post-build audit, 2026-07-23)
+
+Independent review confirmed the hard constraints and re-ran all gates green.
+Five fixes applied on top of the executor's work:
+
+1. `Callouts.svelte` — keyboard focus now drives the same filament-brighten /
+   ring-pause choreography as hover (`onfocus`/`onblur` mirrored).
+2. `Callouts.svelte` — labels without a projected tip position are
+   `visibility: hidden`, removing the pre-hydration corner-stack flash.
+3. `SpecimenCanvas.svelte` — `startPhase` resolves any superseded phase promise,
+   so an interrupted rite/transition can never strand an awaiter (nav hang).
+4. `FooterStrip.svelte` — sound seal initializes from `isArmed()`; it no longer
+   shows ○ after navigation while the drone is still playing.
+5. `+layout.svelte` — arrival fade-in restored (transition moved to `.page`).
+
 ## Deviations
 
 See `DEVIATIONS.md`.
