@@ -2,6 +2,19 @@
 
 Generated for owner review. **Not pushed.** Work is complete locally on `main`.
 
+## Commit log (phase-by-phase)
+
+```
+ef4df28 feat(phase-6): OG plates, sitemap, robots, deploy workflow, audit docs (no push)
+2abb6cb feat(phase-5): route transitions, opt-in procedural sound, root layout theater
+c8948ad feat(phase-4): work ledger, notes, author, correspondence, repository, 404
+56d6acc feat(phase-3): lily geometry, SpecimenCanvas, rings, callouts, assembly rite, eclipse
+be037c2 feat(phase-2): dossier chrome, poison garden, DocumentPage shell
+4c045b6 feat(phase-1): anatomy, routes, site config, mode/prefs stores, content collections
+aa72ddc feat(phase-0): sveltekit scaffold, design tokens, fonts, paper physics
+add26a5 chore: design record (spec, plan, mockups) + gitignore
+```
+
 ## Hard constraints
 
 | Constraint | Where verified |
