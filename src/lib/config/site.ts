@@ -4,7 +4,7 @@ export const site = {
   year: '2026',
   identityLine: 'GROWN IN THE DARK · READ IN THE LIGHT',
   availabilityLine: 'AVAILABLE FOR COMMISSIONS · COLLABORATIONS · CORRESPONDENCE',
-  email: 'hey@jhavonei.me',
+  email: 'contact@jhavonei.me',
   /** Empty string ⇒ form hidden, mailto shown instead. Paste Formspree endpoint when created. */
   formspreeEndpoint: '',
   github: { handle: 'jhavonei' },

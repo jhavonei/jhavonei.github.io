@@ -17,3 +17,5 @@ Running log of intentional or forced deviations from the implementation plan.
 | 2026-07-23 | T16 | Eclipse disc uses token hex literals `#e9e7e2` / `#0a0a0a` for opposite paper | Plan requires opposite tone before CSS class flips; values identical to `--paper` twins |
 | 2026-07-23 | T23 | StaticPlate uses full Rev.B lily paths from mockup | Completed as plan specified |
 | 2026-07-23 | T27 | Deploy workflow present; push not executed | Owner will push after audit |
+| 2026-07-23 | spec §3.4 | **Owner decision:** cursor repulsion removed from hero idle physics; continuous `rotation.y = t*0.05` replaced with gentle ±0.1 rad sway | Dispersal made stamen nodes hard to click; bloom now holds form, callouts hold position. Supersedes the frozen-constants contract by owner order |
+| 2026-07-23 | spec §6.4 | Public email `hey@jhavonei.me` → `contact@jhavonei.me` | Owner decision |

@@ -86,13 +86,6 @@
       paintColors();
       applyMode();
 
-      const mouse = { x: 0, y: 0 };
-      const onMove = (e: MouseEvent) => {
-        mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
-        mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
-      };
-      window.addEventListener('mousemove', onMove);
-
       // phase machine: 'assembling' | 'idle' | 'departing' | 'condensing' | 'hidden'
       let phase: string = 'idle';
       let phaseT0 = 0, phaseMs = 0, phaseDir: [number, number] = [0, 1];
@@ -176,18 +169,11 @@
           material.opacity *= 0.96;
           if (raw >= 1) { phase = 'hidden'; phaseDone?.(); phaseDone = null; }
         } else if (phase === 'idle') {
-          // ── WovenLight physics, ported 1:1 (flat arrays) ──
-          const mx = mouse.x * 3, my = mouse.y * 3;
+          // Owner decision 2026-07-23: cursor repulsion removed — the specimen
+          // holds its form so the stamen nodes stay stable and clickable.
+          // Spring + damping retained so residual velocities settle to rest.
           for (let k = 0; k < n; k++) {
             const ix = k * 3, iy = ix + 1, iz = ix + 2;
-            const dx = pos[ix] - mx, dy = pos[iy] - my, dz = pos[iz];
-            const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
-            if (dist < 1.5 && dist > 0) {
-              const force = (1.5 - dist) * 0.01;
-              vel[ix] += (dx / dist) * force;
-              vel[iy] += (dy / dist) * force;
-              vel[iz] += (dz / dist) * force;
-            }
             vel[ix] += (orig[ix] - pos[ix]) * 0.001;
             vel[iy] += (orig[iy] - pos[iy]) * 0.001;
             vel[iz] += (orig[iz] - pos[iz]) * 0.001;
@@ -197,7 +183,9 @@
         }
         geometry.attributes.position.needsUpdate = true;
 
-        points.rotation.y = elapsed * 0.05;                       // contract
+        // Owner decision 2026-07-23: continuous rotation replaced with a gentle
+        // sway (±0.1 rad) so the bloom stays face-on and callouts hold position.
+        points.rotation.y = 0.1 * Math.sin(elapsed * 0.15);
         const s = 1 + 0.025 * Math.sin((elapsed * 2 * Math.PI) / 7); // breathing
         points.scale.setScalar(s);
 
@@ -231,7 +219,6 @@
       window.addEventListener('resize', onResize);
 
       cleanup = () => {
-        window.removeEventListener('mousemove', onMove);
         window.removeEventListener('resize', onResize);
         geometry.dispose(); material.dispose(); renderer.dispose();
         host.contains(renderer.domElement) && host.removeChild(renderer.domElement);
