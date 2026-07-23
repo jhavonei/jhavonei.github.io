@@ -3,6 +3,7 @@
   import { mode } from '$lib/systems/mode.svelte';
   import { page } from '$app/state';
   import { isArmed, toggleSound } from '$lib/systems/sound';
+  import { eclipse } from '$lib/systems/eclipse';
   let on = $state(isArmed());
 </script>
 
@@ -14,7 +15,7 @@
     {/each}
   </nav>
   <div class="ops">
-    <button class="seal" onclick={() => mode.toggle()}>Fig.00 ⇄ {mode.current === 'black' ? 'White' : 'Black'}</button>
+    <button class="seal" onclick={() => void eclipse.request()}>Fig.00 ⇄ {mode.current === 'black' ? 'White' : 'Black'}</button>
     <button class="seal" onclick={() => (on = toggleSound())} aria-pressed={on}>Sound {on ? '●' : '○'}</button>
   </div>
   <div class="colophon label">BLACKWHITE · JHAVONEI.ME · ALL OVER THE WORLD</div>

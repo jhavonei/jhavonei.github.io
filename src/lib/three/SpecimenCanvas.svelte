@@ -88,12 +88,13 @@
         }
         geometry.attributes.color.needsUpdate = true;
       };
+      const baseOpacity = () => (mode.current === 'black' ? 1.0 : 0.85);
       const applyMode = () => {
         const dark = mode.current === 'black';
         // NormalBlending in BOTH modes: additive dark-on-light sums past white
         // and renders invisible — dark ink on light paper needs alpha blending.
         material.blending = THREE.NormalBlending;
-        material.opacity = dark ? 1.0 : 0.85;
+        material.opacity = baseOpacity();
         material.color.setHex(dark ? INK.black : INK.white);
         material.needsUpdate = true;
       };
@@ -113,15 +114,15 @@
       api = {
         assemble: (ms = 1500) => { vel.fill(0); return startPhase('assembling', ms); },
         finishAssembly: () => { pos.set(orig); vel.fill(0); phase = 'idle'; phaseDone?.(); phaseDone = null; },
-        disintegrate: (dir, ms = 700) => { phaseDir = dir; return startPhase('departing', ms); },
-        condense: (dir, ms = 700) => {
+        // Dive INTO the clicked branch: the world slides opposite the stamen
+        // direction and toward the camera, so the chosen tip sweeps through
+        // screen center and past the viewer.
+        disintegrate: (dir, ms = 900) => { phaseDir = dir; return startPhase('departing', ms); },
+        // Arrival home reverses the dive: start displaced inside that branch,
+        // settle back to center.
+        condense: (dir, ms = 900) => {
           phaseDir = dir;
-          for (let k = 0; k < n; k++) {
-            pos[k * 3] = orig[k * 3] - dir[0] * 8 + (Math.random() - 0.5) * 3;
-            pos[k * 3 + 1] = orig[k * 3 + 1] - dir[1] * 8 + (Math.random() - 0.5) * 3;
-            pos[k * 3 + 2] = orig[k * 3 + 2] + (Math.random() - 0.5) * 3;
-          }
-          material.opacity = mode.current === 'black' ? 1.0 : 0.8;
+          pos.set(orig); vel.fill(0);
           return startPhase('condensing', ms);
         },
         setFocus: (fig) => {
@@ -156,37 +157,42 @@
           applyMode();
         }
 
-        if (phase === 'assembling' || phase === 'condensing') {
+        if (phase === 'assembling') {
           const raw = Math.min((now - phaseT0) / phaseMs, 1);
           for (let k = 0; k < n; k++) {
-            const stag = phase === 'assembling' ? (lily.filament[k] % 6) * 0.06 : 0;
+            const stag = (lily.filament[k] % 6) * 0.06;
             const t = ease(Math.min(Math.max((raw - stag) / (1 - stag || 1), 0), 1));
-            if (phase === 'assembling') {
-              pos[k * 3] = scatter[k * 3] + (orig[k * 3] - scatter[k * 3]) * t;
-              pos[k * 3 + 1] = scatter[k * 3 + 1] + (orig[k * 3 + 1] - scatter[k * 3 + 1]) * t;
-              pos[k * 3 + 2] = scatter[k * 3 + 2] + (orig[k * 3 + 2] - scatter[k * 3 + 2]) * t;
-            } else {
-              pos[k * 3] += (orig[k * 3] - pos[k * 3]) * 0.12;
-              pos[k * 3 + 1] += (orig[k * 3 + 1] - pos[k * 3 + 1]) * 0.12;
-              pos[k * 3 + 2] += (orig[k * 3 + 2] - pos[k * 3 + 2]) * 0.12;
-            }
+            pos[k * 3] = scatter[k * 3] + (orig[k * 3] - scatter[k * 3]) * t;
+            pos[k * 3 + 1] = scatter[k * 3 + 1] + (orig[k * 3 + 1] - scatter[k * 3 + 1]) * t;
+            pos[k * 3 + 2] = scatter[k * 3 + 2] + (orig[k * 3 + 2] - scatter[k * 3 + 2]) * t;
           }
           if (raw >= 1) {
-            if (phase === 'condensing') pos.set(orig);
-            vel.fill(0); // lerp phases ignore velocity — clear residuals or the bloom sheds a dust halo
+            vel.fill(0); // lerp ignores velocity — clear residuals or the bloom sheds a dust halo
             phase = 'idle'; phaseDone?.(); phaseDone = null;
           }
         } else if (phase === 'departing') {
           const raw = Math.min((now - phaseT0) / phaseMs, 1);
+          const e = raw * raw * raw; // ease-in: the dive accelerates
+          points.position.set(-phaseDir[0] * 2.6 * e, -phaseDir[1] * 2.6 * e, 3.8 * e);
           for (let k = 0; k < n; k++) {
-            const px = pos[k * 3], py = pos[k * 3 + 1];
+            const ix = k * 3, iy = ix + 1;
+            const px = pos[ix], py = pos[iy];
             const d = Math.hypot(px, py) || 1;
-            pos[k * 3] += (px / d) * 0.04 + phaseDir[0] * 0.12;
-            pos[k * 3 + 1] += (py / d) * 0.04 + phaseDir[1] * 0.12;
-            pos[k * 3 + 2] += 0.06; // toward camera
+            pos[ix] += (px / d) * 0.012; // light radial shed for texture
+            pos[iy] += (py / d) * 0.012;
           }
-          material.opacity *= 0.96;
+          material.opacity = baseOpacity() * (raw < 0.55 ? 1 : Math.max(0, 1 - (raw - 0.55) / 0.45));
           if (raw >= 1) { phase = 'hidden'; phaseDone?.(); phaseDone = null; }
+        } else if (phase === 'condensing') {
+          const raw = Math.min((now - phaseT0) / phaseMs, 1);
+          const remain = Math.pow(1 - raw, 3); // ease-out: the return decelerates
+          points.position.set(-phaseDir[0] * 2.6 * remain, -phaseDir[1] * 2.6 * remain, 3.8 * remain);
+          material.opacity = baseOpacity() * Math.min(1, raw / 0.4);
+          if (raw >= 1) {
+            points.position.set(0, 0, 0);
+            material.opacity = baseOpacity();
+            phase = 'idle'; phaseDone?.(); phaseDone = null;
+          }
         } else if (phase === 'idle') {
           // Owner decision 2026-07-23: cursor repulsion removed — the specimen
           // holds its form so the stamen nodes stay stable and clickable.
@@ -212,7 +218,7 @@
         const v = new THREE.Vector3();
         const yAxis = new THREE.Vector3(0, 1, 0);
         const tips = lily.tips.map(([x, y, z]) => {
-          v.set(x * s, y * s, z * s).applyAxisAngle(yAxis, points.rotation.y).project(camera);
+          v.set(x * s, y * s, z * s).applyAxisAngle(yAxis, points.rotation.y).add(points.position).project(camera);
           return { x: (v.x + 1) / 2 * host.clientWidth, y: (1 - v.y) / 2 * host.clientHeight };
         });
         ontips(tips);

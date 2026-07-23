@@ -13,6 +13,7 @@
   import { directionFor } from '$lib/config/routes';
   import { transitions } from '$lib/systems/transitions';
   import { navSound } from '$lib/systems/sound';
+  import EclipseDisc from '$lib/hero/EclipseDisc.svelte';
 
   let { children } = $props();
   let exhaling = $state(false);
@@ -37,6 +38,7 @@
 </script>
 
 <div class="page" class:exhaling>{@render children()}</div>
+<EclipseDisc />
 
 <style>
   .page { min-height: 100vh; transition: opacity 0.25s var(--ease-wipe), transform 0.25s var(--ease-wipe); }

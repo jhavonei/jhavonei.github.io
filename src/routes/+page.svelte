@@ -5,7 +5,6 @@
   import Rings from '$lib/hero/Rings.svelte';
   import Callouts from '$lib/hero/Callouts.svelte';
   import AssemblyRite, { type RitePhase } from '$lib/hero/AssemblyRite.svelte';
-  import EclipseDisc from '$lib/hero/EclipseDisc.svelte';
   import HeaderRows from '$lib/chrome/HeaderRows.svelte';
   import FooterStrip from '$lib/chrome/FooterStrip.svelte';
   import Seo from '$lib/chrome/Seo.svelte';
@@ -13,6 +12,7 @@
   import { prefersReducedMotion } from '$lib/systems/prefs';
   import { site } from '$lib/config/site';
   import { transitions } from '$lib/systems/transitions';
+  import { eclipse } from '$lib/systems/eclipse';
   import { directionFor } from '$lib/config/routes';
   import { ROUTES } from '$lib/config/routes';
 
@@ -25,7 +25,6 @@
     flickerInvert: () => Promise<void>;
   }
   let canvas: CanvasHandle | undefined = $state();
-  let eclipseRef: { eclipse: (fn?: () => void) => Promise<void> } | undefined = $state();
   let tips: { x: number; y: number }[] = $state([]);
   let focused: number | null = $state(null);
   let degraded = $state(false);
@@ -61,7 +60,6 @@
     onphase={(p) => (rite = p)}
     assemble={(ms) => canvas?.assemble(ms) ?? Promise.resolve()}
     finish={() => void canvas?.finishAssembly()} />
-  <EclipseDisc bind:this={eclipseRef} />
   {#if reduced || degraded}
     <StaticPlate ontips={(t) => (tips = t)} />
   {:else}
@@ -83,7 +81,7 @@
       {tips}
       onfocus={(f) => { focused = f; void canvas?.setFocus(f); }}
       onnavigate={(path) => goto(path)}
-      oninvert={() => eclipseRef?.eclipse(() => void canvas?.flickerInvert())} />
+      oninvert={() => void eclipse.request(() => void canvas?.flickerInvert())} />
   </div>
   <!-- Chrome always in DOM: footer strip is the no-JS nav path -->
   <div class="chrome top" class:dim={!visible(['chrome', 'particles', 'rings', 'callouts'])}>
