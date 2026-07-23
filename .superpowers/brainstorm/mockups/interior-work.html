@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JHAVONEI — DOC.002 — INTERIOR PAGE STUDY (FIG.01 WORK)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Archivo+Narrow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #c8c8c4; --ink-strong: #efefec; --ink-faint: rgba(200,200,196,0.38);
+    --hairline: rgba(200,200,196,0.16); --hairline-strong: rgba(200,200,196,0.34);
+    --paper: #0a0a0a; --paper-raise: #101010; --dot: rgba(200,200,196,0.10); --accent: #efefec;
+  }
+  html.white {
+    --ink: #1c1c1a; --ink-strong: #0a0a0a; --ink-faint: rgba(28,28,26,0.42);
+    --hairline: rgba(28,28,26,0.18); --hairline-strong: rgba(28,28,26,0.38);
+    --paper: #e9e7e2; --paper-raise: #efede8; --dot: rgba(28,28,26,0.12); --accent: #0a0a0a;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background:var(--paper); color:var(--ink);
+    font-family:'IBM Plex Mono',monospace; font-size:13px; line-height:1.55; letter-spacing:.02em;
+    background-image:radial-gradient(var(--dot) 1px, transparent 1px); background-size:26px 26px;
+    transition:background-color .6s ease, color .6s ease;
+  }
+  body::after {
+    content:""; position:fixed; inset:0; pointer-events:none; z-index:50; opacity:.5; mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E");
+  }
+  .sheet { max-width:1080px; margin:0 auto; padding:28px 34px 80px; }
+  .row {
+    display:flex; justify-content:space-between; align-items:baseline;
+    border-bottom:1px solid var(--hairline-strong); padding:6px 2px;
+    text-transform:uppercase; color:var(--ink-strong); font-weight:500;
+  }
+  .row .mid { color:var(--ink-faint); font-weight:300; }
+  .row.sub { color:var(--ink); font-weight:400; border-bottom-color:var(--hairline); }
+  .toggle {
+    cursor:pointer; border:1px solid var(--hairline-strong); padding:2px 10px; font:inherit;
+    background:transparent; color:var(--ink-strong); text-transform:uppercase; letter-spacing:.12em;
+  }
+  .toggle:hover { background:var(--ink-strong); color:var(--paper); }
+  .brief {
+    margin:26px auto 34px; max-width:680px; text-align:center;
+    color:var(--ink-faint); text-transform:uppercase; letter-spacing:.08em; font-size:11px;
+  }
+  .brief b { color:var(--ink); font-weight:500; }
+
+  .variant {
+    border:1px solid var(--hairline-strong); background:var(--paper-raise);
+    margin-bottom:44px; cursor:pointer; position:relative;
+    transition:border-color .25s ease;
+  }
+  .variant:hover { border-color:var(--ink); }
+  .variant.selected { border-color:var(--accent); box-shadow:0 0 0 1px var(--accent); }
+  .variant.selected .stamp { opacity:1; transform:rotate(-8deg) scale(1); }
+  .stamp {
+    position:absolute; top:14px; right:14px; z-index:5; border:1.5px solid var(--accent); color:var(--accent);
+    padding:2px 10px; text-transform:uppercase; letter-spacing:.2em; font-size:10px;
+    opacity:0; transform:rotate(-8deg) scale(1.3); transition:all .25s ease;
+  }
+  .vlabel {
+    border-bottom:1px solid var(--hairline-strong); padding:10px 18px;
+    display:flex; justify-content:space-between; text-transform:uppercase; letter-spacing:.14em; font-size:11px; color:var(--ink-strong);
+  }
+  .vbody { padding:26px 30px 34px; }
+
+  /* ── shared interior page chrome ── */
+  .doc-head { display:flex; justify-content:space-between; align-items:flex-start; border-bottom:1px solid var(--hairline-strong); padding-bottom:14px; }
+  .doc-head .back { font-size:10.5px; text-transform:uppercase; letter-spacing:.14em; color:var(--ink-faint); }
+  .doc-head .back::before { content:"⟵ "; }
+  .doc-title { font-family:'Archivo Narrow',sans-serif; font-weight:600; font-size:44px; letter-spacing:.16em; text-transform:uppercase; color:var(--ink-strong); line-height:1; margin-top:6px; }
+  .doc-sub { font-size:10.5px; text-transform:uppercase; letter-spacing:.14em; color:var(--ink-faint); margin-top:8px; }
+  .plant { flex:0 0 auto; text-align:center; }
+  .plant svg { display:block; }
+  .plant .pname { font-size:8.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-faint); font-style:italic; margin-top:2px; }
+  .openline {
+    border-bottom:1px dashed var(--hairline); padding:10px 0; margin-bottom:22px;
+    font-size:10.5px; letter-spacing:.3em; text-transform:uppercase; color:var(--ink-faint);
+    white-space:nowrap; overflow:hidden;
+  }
+  svg .stroke { stroke:var(--ink); fill:none; }
+  svg .faint { stroke:var(--hairline-strong); fill:none; }
+  svg .dotfill { fill:var(--ink); }
+
+  /* ── option 1: ledger ── */
+  .ledger { border-top:1px solid var(--hairline-strong); }
+  .lrow {
+    display:grid; grid-template-columns:64px 1fr 200px 70px 90px;
+    gap:14px; padding:13px 6px; border-bottom:1px solid var(--hairline);
+    text-transform:uppercase; letter-spacing:.06em; align-items:baseline;
+  }
+  .lrow:hover { background:rgba(128,128,128,0.06); }
+  .lrow .v { color:var(--ink-faint); }
+  .lrow .t { color:var(--ink-strong); font-weight:500; letter-spacing:.1em; }
+  .lrow .c, .lrow .y { color:var(--ink-faint); font-size:11px; }
+  .lrow .s { font-size:10px; letter-spacing:.16em; text-align:right; }
+  .lrow .s.live::before { content:"● "; font-size:8px; }
+  .lrow .s.pending { color:var(--ink-faint); }
+  .lrow.open { background:rgba(128,128,128,0.05); }
+  .ldetail {
+    display:grid; grid-template-columns:1.4fr 1fr; gap:24px;
+    padding:6px 6px 24px 84px; border-bottom:1px solid var(--hairline);
+  }
+  .ldetail p { font-weight:300; font-size:12px; max-width:52ch; }
+  .ldetail .meta { font-size:10.5px; color:var(--ink-faint); text-transform:uppercase; letter-spacing:.12em; line-height:2; }
+  .thumb {
+    border:1px solid var(--hairline-strong); height:120px; position:relative;
+    background:repeating-linear-gradient(45deg, transparent, transparent 6px, var(--hairline) 6px, var(--hairline) 7px);
+  }
+  .thumb span { position:absolute; bottom:6px; right:8px; font-size:9px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-faint); }
+
+  /* ── option 2: plates ── */
+  .pgrid { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+  @media (max-width:800px){ .pgrid { grid-template-columns:1fr; } }
+  .pcard { border:1px solid var(--hairline-strong); padding:14px; }
+  .pcard:hover { border-color:var(--ink); }
+  .pcard .ph { display:flex; justify-content:space-between; font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-faint); border-bottom:1px solid var(--hairline); padding-bottom:6px; }
+  .pcard .pimg { height:130px; margin:12px 0; border:1px solid var(--hairline); position:relative; background:repeating-linear-gradient(45deg, transparent, transparent 6px, var(--hairline) 6px, var(--hairline) 7px); }
+  .pcard h4 { font-family:'Archivo Narrow',sans-serif; font-weight:600; font-size:17px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-strong); }
+  .pcard .pc { font-size:10.5px; color:var(--ink-faint); text-transform:uppercase; letter-spacing:.1em; margin-top:4px; }
+  .pcard.pending { border-style:dashed; opacity:.65; }
+  .pcard.pending .pimg { background:none; display:flex; align-items:center; justify-content:center; font-size:10px; letter-spacing:.2em; text-transform:uppercase; color:var(--ink-faint); border-style:dashed; }
+
+  .footer {
+    margin-top:10px; border-top:1px solid var(--hairline-strong); padding-top:8px;
+    display:flex; justify-content:space-between;
+    text-transform:uppercase; font-size:10.5px; letter-spacing:.14em; color:var(--ink-faint);
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+  <div class="row">
+    <span>JHAVONEI</span><span class="mid">INTERIOR PAGE STUDY — FIG.01 WORK</span><span>2026</span>
+  </div>
+  <div class="row sub">
+    <span>DOC.002</span>
+    <span class="mid">TWO TREATMENTS · POISON-GARDEN SYSTEM SHOWN IN BOTH</span>
+    <button class="toggle" onclick="document.documentElement.classList.toggle('white')">BLACK ⇄ WHITE</button>
+  </div>
+
+  <p class="brief">
+    Both variants share the interior chrome: dossier header, <b>route's own dangerous plant</b> as the page specimen
+    (Work = <b>Datura stramonium</b>; Notes = Digitalis; Author = Belladonna; Correspondence = Oleander; Repository = Aconitum),
+    and the <b>opening line</b> — the manifesto ring text that unwound during the transition, now resting as a rule of type.
+    Click a variant to mark it; reply in the terminal.
+  </p>
+
+  <!-- ═══════════ OPTION 1 — THE LEDGER ═══════════ -->
+  <div class="variant" data-choice="ledger" onclick="sel(this)">
+    <div class="stamp">Selected</div>
+    <div class="vlabel"><span>Option 1 — The Ledger</span><span>Index as instrument</span></div>
+    <div class="vbody">
+
+      <div class="doc-head">
+        <div>
+          <div class="back">Return to specimen</div>
+          <div class="doc-title">Work</div>
+          <div class="doc-sub">Fig.01 · Catalogue of built things · 4 entries · 2 slots pending</div>
+        </div>
+        <div class="plant">
+          <svg width="92" height="120" viewBox="0 0 92 120">
+            <g class="stroke" stroke-width="0.8">
+              <path d="M46,116 C 45,90 44,66 46,44"/>
+              <path d="M46,44 C 36,38 30,24 33,8 C 40,16 44,20 46,26 C 48,20 52,16 59,8 C 62,24 56,38 46,44"/>
+              <path class="faint" d="M46,44 C 43,32 42,22 44,12"/>
+              <path class="faint" d="M46,44 C 49,32 50,22 48,12"/>
+              <path d="M46,78 C 34,74 24,76 16,84 C 26,88 38,86 46,78"/>
+              <path class="faint" d="M46,78 C 36,79 28,81 20,84"/>
+              <circle class="dotfill" cx="33" cy="8" r="1.4" stroke="none"/><circle class="dotfill" cx="59" cy="8" r="1.4" stroke="none"/>
+            </g>
+          </svg>
+          <div class="pname">Datura stramonium</div>
+        </div>
+      </div>
+
+      <div class="openline">To intrigue · to persuade · to unsettle · or to promise · the finest opening lines linger in memory ·</div>
+
+      <div class="ledger">
+        <div class="lrow">
+          <span class="v">V.01</span><span class="t">Nocturne Engine</span><span class="c">Class: Web Instrument</span><span class="y">2026</span><span class="s live">Live</span>
+        </div>
+        <div class="lrow open">
+          <span class="v">V.02</span><span class="t">Choir of Small Machines</span><span class="c">Class: AI Experiment</span><span class="y">2026</span><span class="s live">Live</span>
+        </div>
+        <div class="ldetail">
+          <div>
+            <p>An ensemble of tiny language models given one instrument each, improvising against a metronome no one can hear. Built to ask whether coordination without communication is still music.</p>
+            <div class="meta">Stack — SvelteKit · Three.js · ONNX Runtime<br>Role — Everything<br>Exhibit — choir.jhavonei.me ↗ · Source ↗</div>
+          </div>
+          <div class="thumb"><span>Exhibit V.02 — plate forthcoming</span></div>
+        </div>
+        <div class="lrow">
+          <span class="v">V.03</span><span class="t">Field Recorder</span><span class="c">Class: Tooling</span><span class="y">2025</span><span class="s live">Live</span>
+        </div>
+        <div class="lrow">
+          <span class="v">V.04</span><span class="t">Grimoire Parser</span><span class="c">Class: Library</span><span class="y">2025</span><span class="s">Archived</span>
+        </div>
+        <div class="lrow">
+          <span class="v">V.05</span><span class="t" style="color:var(--ink-faint); font-weight:300">— Specimen pending —</span><span class="c"></span><span class="y"></span><span class="s pending">Sealed</span>
+        </div>
+        <div class="lrow">
+          <span class="v">V.06</span><span class="t" style="color:var(--ink-faint); font-weight:300">— Specimen pending —</span><span class="c"></span><span class="y"></span><span class="s pending">Sealed</span>
+        </div>
+      </div>
+      <p style="margin-top:14px; font-size:10.5px; color:var(--ink-faint); text-transform:uppercase; letter-spacing:.1em">
+        Rows expand in place (V.02 shown open). Dense, archival, fast to scan — the catalogue IS the aesthetic. Project detail pages optional later.
+      </p>
+    </div>
+  </div>
+
+  <!-- ═══════════ OPTION 2 — THE PLATE GRID ═══════════ -->
+  <div class="variant" data-choice="plates" onclick="sel(this)">
+    <div class="stamp">Selected</div>
+    <div class="vlabel"><span>Option 2 — The Plate Grid</span><span>Every project a specimen plate</span></div>
+    <div class="vbody">
+
+      <div class="doc-head">
+        <div>
+          <div class="back">Return to specimen</div>
+          <div class="doc-title">Work</div>
+          <div class="doc-sub">Fig.01 · Catalogue of built things · 4 entries · 2 slots pending</div>
+        </div>
+        <div class="plant">
+          <svg width="92" height="120" viewBox="0 0 92 120">
+            <g class="stroke" stroke-width="0.8">
+              <path d="M46,116 C 45,90 44,66 46,44"/>
+              <path d="M46,44 C 36,38 30,24 33,8 C 40,16 44,20 46,26 C 48,20 52,16 59,8 C 62,24 56,38 46,44"/>
+              <path class="faint" d="M46,44 C 43,32 42,22 44,12"/>
+              <path class="faint" d="M46,44 C 49,32 50,22 48,12"/>
+              <path d="M46,78 C 34,74 24,76 16,84 C 26,88 38,86 46,78"/>
+              <path class="faint" d="M46,78 C 36,79 28,81 20,84"/>
+              <circle class="dotfill" cx="33" cy="8" r="1.4" stroke="none"/><circle class="dotfill" cx="59" cy="8" r="1.4" stroke="none"/>
+            </g>
+          </svg>
+          <div class="pname">Datura stramonium</div>
+        </div>
+      </div>
+
+      <div class="openline">To intrigue · to persuade · to unsettle · or to promise · the finest opening lines linger in memory ·</div>
+
+      <div class="pgrid">
+        <div class="pcard">
+          <div class="ph"><span>V.01</span><span>2026 · Live</span></div>
+          <div class="pimg"></div>
+          <h4>Nocturne Engine</h4>
+          <div class="pc">Class: Web Instrument</div>
+        </div>
+        <div class="pcard">
+          <div class="ph"><span>V.02</span><span>2026 · Live</span></div>
+          <div class="pimg"></div>
+          <h4>Choir of Small Machines</h4>
+          <div class="pc">Class: AI Experiment</div>
+        </div>
+        <div class="pcard">
+          <div class="ph"><span>V.03</span><span>2025 · Live</span></div>
+          <div class="pimg"></div>
+          <h4>Field Recorder</h4>
+          <div class="pc">Class: Tooling</div>
+        </div>
+        <div class="pcard">
+          <div class="ph"><span>V.04</span><span>2025 · Archived</span></div>
+          <div class="pimg"></div>
+          <h4>Grimoire Parser</h4>
+          <div class="pc">Class: Library</div>
+        </div>
+        <div class="pcard pending">
+          <div class="ph"><span>V.05</span><span>Sealed</span></div>
+          <div class="pimg">Specimen pending</div>
+          <h4 style="color:var(--ink-faint)">—</h4>
+          <div class="pc">Unclassified</div>
+        </div>
+        <div class="pcard pending">
+          <div class="ph"><span>V.06</span><span>Sealed</span></div>
+          <div class="pimg">Specimen pending</div>
+          <h4 style="color:var(--ink-faint)">—</h4>
+          <div class="pc">Unclassified</div>
+        </div>
+      </div>
+      <p style="margin-top:14px; font-size:10.5px; color:var(--ink-faint); text-transform:uppercase; letter-spacing:.1em">
+        Plates click through to a full specimen page per project (Doc.002.1, .2 …). More visual room per project, slower to scan, needs an image/ornament per entry.
+      </p>
+    </div>
+  </div>
+
+  <div class="footer">
+    <span>Reply in the terminal — pick a treatment, judge the poison garden</span>
+    <span>Doc.002 · Rev.A</span>
+  </div>
+</div>
+<script>
+  function sel(el){
+    document.querySelectorAll('.variant').forEach(p => { if(p!==el) p.classList.remove('selected'); });
+    el.classList.toggle('selected');
+  }
+</script>
+</body>
+</html>

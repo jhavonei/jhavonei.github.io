@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JHAVONEI — DOC.001 — HERO NAVIGATION STUDY</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Archivo+Narrow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #c8c8c4;
+    --ink-strong: #efefec;
+    --ink-faint: rgba(200,200,196,0.38);
+    --hairline: rgba(200,200,196,0.16);
+    --hairline-strong: rgba(200,200,196,0.34);
+    --paper: #0a0a0a;
+    --paper-raise: #101010;
+    --dot: rgba(200,200,196,0.10);
+    --accent: #efefec;
+  }
+  html.white {
+    --ink: #1c1c1a;
+    --ink-strong: #0a0a0a;
+    --ink-faint: rgba(28,28,26,0.42);
+    --hairline: rgba(28,28,26,0.18);
+    --hairline-strong: rgba(28,28,26,0.38);
+    --paper: #e9e7e2;
+    --paper-raise: #efede8;
+    --dot: rgba(28,28,26,0.12);
+    --accent: #0a0a0a;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    line-height: 1.55;
+    letter-spacing: 0.02em;
+    background-image:
+      radial-gradient(var(--dot) 1px, transparent 1px);
+    background-size: 26px 26px;
+    transition: background-color .6s ease, color .6s ease;
+    min-height: 100vh;
+  }
+  /* film grain */
+  body::after {
+    content:""; position:fixed; inset:0; pointer-events:none; z-index:50;
+    opacity:.5; mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E");
+  }
+  .sheet { max-width:1180px; margin:0 auto; padding:28px 34px 90px; }
+
+  /* ── dossier header rows, justified like the poster ── */
+  .row {
+    display:flex; justify-content:space-between; align-items:baseline;
+    border-bottom:1px solid var(--hairline-strong);
+    padding:6px 2px; text-transform:uppercase;
+    color:var(--ink-strong); font-weight:500;
+  }
+  .row .mid { color:var(--ink-faint); font-weight:300; }
+  .row.sub { color:var(--ink); font-weight:400; border-bottom-color:var(--hairline); }
+  .toggle {
+    cursor:pointer; user-select:none; border:1px solid var(--hairline-strong);
+    padding:2px 10px; font:inherit; background:transparent; color:var(--ink-strong);
+    text-transform:uppercase; letter-spacing:.12em;
+  }
+  .toggle:hover { background:var(--ink-strong); color:var(--paper); }
+
+  .brief {
+    margin:34px auto 10px; max-width:640px; text-align:center;
+    color:var(--ink-faint); text-transform:uppercase; letter-spacing:.08em; font-size:11px;
+  }
+  .brief b { color:var(--ink); font-weight:500; }
+
+  /* ── plates grid ── */
+  .plates { display:grid; grid-template-columns:1fr 1fr; gap:26px; margin-top:30px; }
+  @media (max-width:900px){ .plates { grid-template-columns:1fr; } }
+
+  .plate {
+    border:1px solid var(--hairline-strong);
+    background:var(--paper-raise);
+    padding:18px 18px 20px; cursor:pointer; position:relative;
+    transition:border-color .25s ease, transform .25s ease;
+  }
+  .plate:hover { border-color:var(--ink); transform:translateY(-2px); }
+  .plate.selected { border-color:var(--accent); box-shadow:0 0 0 1px var(--accent); }
+  .plate.selected .stamp { opacity:1; transform:rotate(-8deg) scale(1); }
+  .stamp {
+    position:absolute; top:14px; right:14px; z-index:5;
+    border:1.5px solid var(--accent); color:var(--accent);
+    padding:2px 10px; text-transform:uppercase; letter-spacing:.2em; font-size:10px;
+    opacity:0; transform:rotate(-8deg) scale(1.3); transition:all .25s ease;
+  }
+  .plate-head { display:flex; justify-content:space-between; text-transform:uppercase; font-size:11px; letter-spacing:.1em; border-bottom:1px solid var(--hairline); padding-bottom:8px; }
+  .plate-head .latin { font-style:italic; color:var(--ink-faint); }
+  .fig { display:block; width:100%; height:330px; margin:10px 0 4px; }
+  .fig text { font-family:'IBM Plex Mono',monospace; font-size:7.5px; letter-spacing:.12em; fill:var(--ink-faint); text-transform:uppercase; }
+  .fig .figlabel { fill:var(--ink); font-size:7px; }
+  .fig .stroke { stroke:var(--ink); fill:none; }
+  .fig .faint  { stroke:var(--hairline-strong); fill:none; }
+  .fig .dotfill{ fill:var(--ink); }
+
+  .plate h3 {
+    font-family:'Archivo Narrow',sans-serif; font-weight:600; font-size:22px;
+    letter-spacing:.14em; text-transform:uppercase; color:var(--ink-strong); margin:6px 0 6px;
+  }
+  .plate p { color:var(--ink); font-weight:300; font-size:12px; }
+  .plate .mech { margin-top:10px; padding-top:8px; border-top:1px dashed var(--hairline); color:var(--ink-faint); font-size:11px; }
+  .plate .mech b { color:var(--ink); font-weight:500; }
+
+  .footer {
+    margin-top:46px; border-top:1px solid var(--hairline-strong);
+    padding-top:8px; display:flex; justify-content:space-between;
+    text-transform:uppercase; font-size:10.5px; letter-spacing:.14em; color:var(--ink-faint);
+  }
+  /* stray registration dots, like the posters */
+  .reg { position:fixed; width:5px; height:5px; background:var(--ink-faint); z-index:1; }
+</style>
+</head>
+<body>
+<div class="reg" style="top:12%; left:4%"></div>
+<div class="reg" style="top:70%; left:2.5%; width:4px;height:4px"></div>
+<div class="reg" style="top:22%; right:3.5%"></div>
+<div class="reg" style="top:84%; right:5%; width:4px;height:4px"></div>
+
+<div class="sheet">
+  <div class="row">
+    <span>JHAVONEI</span><span class="mid">HERO NAVIGATION STUDY</span><span>2026</span>
+  </div>
+  <div class="row sub">
+    <span>DOC.001</span>
+    <span class="mid">THE HERO IS THE NAV — SELECT A DIRECTION</span>
+    <button class="toggle" onclick="document.documentElement.classList.toggle('white')">BLACK ⇄ WHITE</button>
+  </div>
+
+  <p class="brief">
+    Four candidate centerpieces. In every direction the landing page has <b>no menu</b> —
+    the organism itself is the instrument: its labelled parts are the routes, and choosing
+    one triggers a cinematic transition into that page. Click a plate to mark it,
+    then reply in the terminal. The <b>BLACK ⇄ WHITE</b> button above previews the twin-mode duality.
+  </p>
+
+  <div class="plates">
+
+    <!-- PLATE A — SPIDER LILY -->
+    <div class="plate" data-choice="A" onclick="sel(this)">
+      <div class="stamp">Selected</div>
+      <div class="plate-head"><span>Plate A</span><span class="latin">Lycoris radiata</span></div>
+      <svg class="fig" viewBox="0 0 400 330">
+        <g transform="translate(200,168)">
+          <!-- petals: 6 recurved lanceolate -->
+          <g class="stroke" stroke-width="0.8">
+            <g><path d="M0,0 C 10,-34 16,-70 2,-104 C -12,-70 -8,-34 0,0"/><path class="faint" d="M0,-8 L0,-96"/></g>
+            <g transform="rotate(60)"><path d="M0,0 C 10,-34 16,-70 2,-104 C -12,-70 -8,-34 0,0"/><path class="faint" d="M0,-8 L0,-96"/></g>
+            <g transform="rotate(120)"><path d="M0,0 C 10,-34 16,-70 2,-104 C -12,-70 -8,-34 0,0"/><path class="faint" d="M0,-8 L0,-96"/></g>
+            <g transform="rotate(180)"><path d="M0,0 C 10,-34 16,-70 2,-104 C -12,-70 -8,-34 0,0"/><path class="faint" d="M0,-8 L0,-96"/></g>
+            <g transform="rotate(240)"><path d="M0,0 C 10,-34 16,-70 2,-104 C -12,-70 -8,-34 0,0"/><path class="faint" d="M0,-8 L0,-96"/></g>
+            <g transform="rotate(300)"><path d="M0,0 C 10,-34 16,-70 2,-104 C -12,-70 -8,-34 0,0"/><path class="faint" d="M0,-8 L0,-96"/></g>
+          </g>
+          <!-- long stamens arcing beyond petals -->
+          <g class="stroke" stroke-width="0.7">
+            <path d="M0,0 C 30,-50 62,-92 96,-118"/><circle class="dotfill" cx="96" cy="-118" r="2.2" stroke="none"/>
+            <path d="M0,0 C 55,-18 100,-32 138,-34"/><circle class="dotfill" cx="138" cy="-34" r="2.2" stroke="none"/>
+            <path d="M0,0 C 40,42 76,74 104,92"/><circle class="dotfill" cx="104" cy="92" r="2.2" stroke="none"/>
+            <path d="M0,0 C -40,42 -76,74 -104,92"/><circle class="dotfill" cx="-104" cy="92" r="2.2" stroke="none"/>
+            <path d="M0,0 C -55,-18 -100,-32 -138,-34"/><circle class="dotfill" cx="-138" cy="-34" r="2.2" stroke="none"/>
+          </g>
+          <circle class="stroke" r="4" stroke-width="0.8"/>
+          <!-- figure callouts -->
+          <g class="faint" stroke-width="0.6">
+            <line x1="96" y1="-118" x2="150" y2="-134"/><line x1="138" y1="-34" x2="176" y2="-40"/>
+            <line x1="104" y1="92" x2="148" y2="106"/><line x1="-104" y1="92" x2="-150" y2="106"/>
+            <line x1="-138" y1="-34" x2="-176" y2="-40"/>
+          </g>
+          <text x="153" y="-131">Fig.01 — Work</text>
+          <text x="179" y="-37">Fig.02 — Notes</text>
+          <text x="151" y="109">Fig.03 — Author</text>
+          <text x="-149" y="109" text-anchor="end">Fig.04 — Contact</text>
+          <text x="-179" y="-37" text-anchor="end">Fig.05 — Repo</text>
+        </g>
+        <text class="figlabel" x="12" y="320">FIG. A — RED SPIDER LILY, PARTICLE-RENDERED · 50,000 PTS · STAMEN TIPS = ROUTES</text>
+      </svg>
+      <h3>The Specimen</h3>
+      <p>A spider lily grown from the WovenLight particle system — 50k points forming petals and long arcing stamens, breathing slowly, flinching from the cursor. Each stamen tip carries a figure-callout label; hovering it makes that filament burn brighter.</p>
+      <div class="mech"><b>Navigation:</b> click a stamen → the bloom disintegrates into particles that stream and re-condense as the destination page's header ornament.</div>
+    </div>
+
+    <!-- PLATE B — STAR -->
+    <div class="plate" data-choice="B" onclick="sel(this)">
+      <div class="stamp">Selected</div>
+      <div class="plate-head"><span>Plate B</span><span class="latin">Stella decem</span></div>
+      <svg class="fig" viewBox="0 0 400 330">
+        <g transform="translate(200,165)">
+          <g class="dotfill">
+            <g><path d="M0,-128 L5,0 L-5,0 Z"/></g>
+            <g transform="rotate(72)"><path d="M0,-128 L5,0 L-5,0 Z"/></g>
+            <g transform="rotate(144)"><path d="M0,-128 L5,0 L-5,0 Z"/></g>
+            <g transform="rotate(216)"><path d="M0,-128 L5,0 L-5,0 Z"/></g>
+            <g transform="rotate(288)"><path d="M0,-128 L5,0 L-5,0 Z"/></g>
+            <g transform="rotate(36)"><path d="M0,-78 L3.5,0 L-3.5,0 Z"/></g>
+            <g transform="rotate(108)"><path d="M0,-78 L3.5,0 L-3.5,0 Z"/></g>
+            <g transform="rotate(180)"><path d="M0,-78 L3.5,0 L-3.5,0 Z"/></g>
+            <g transform="rotate(252)"><path d="M0,-78 L3.5,0 L-3.5,0 Z"/></g>
+            <g transform="rotate(324)"><path d="M0,-78 L3.5,0 L-3.5,0 Z"/></g>
+          </g>
+          <circle class="faint" r="140" stroke-dasharray="1 5" stroke-width="0.7"/>
+          <text x="0" y="-146" text-anchor="middle">01 · Work</text>
+          <text x="142" y="-40" >02 · Notes</text>
+          <text x="90" y="126">03 · Author</text>
+          <text x="-90" y="126" text-anchor="end">04 · Contact</text>
+          <text x="-142" y="-40" text-anchor="end">05 · Repo</text>
+        </g>
+        <text class="figlabel" x="12" y="320">FIG. B — TEN-RAY COMPASS · EACH MAJOR RAY = ROUTE · ROTATES TO POINT AT HOVERED LABEL</text>
+      </svg>
+      <h3>The Compass</h3>
+      <p>The ten-point starburst from the poster, rebuilt as a slowly-rotating navigation instrument on the dot grid. Five major rays are routes; hover a ray and the whole star rotates until that ray points due north, its label typing itself out along the ray.</p>
+      <div class="mech"><b>Navigation:</b> click a ray → the star collapses to its center point, then the point pierces the screen like a pin through paper, pulling the next page through the hole.</div>
+    </div>
+
+    <!-- PLATE C — TEXT MANDALA -->
+    <div class="plate" data-choice="C" onclick="sel(this)">
+      <div class="stamp">Selected</div>
+      <div class="plate-head"><span>Plate C</span><span class="latin">Rosetta textus</span></div>
+      <svg class="fig" viewBox="0 0 400 330">
+        <g transform="translate(200,165)">
+          <defs>
+            <path id="r1" d="M0,-118 A118,118 0 1,1 -0.01,-118"/>
+            <path id="r2" d="M0,-88 A88,88 0 1,1 -0.01,-88"/>
+            <path id="r3" d="M0,-58 A58,58 0 1,1 -0.01,-58"/>
+          </defs>
+          <text><textPath href="#r1">OPENING LINES ARE MORE IMPORTANT THAN YOU THINK · THEY ESTABLISH A CONTRACT · OPENING LINES ARE MORE IMPORTANT THAN YOU THINK ·</textPath></text>
+          <text><textPath href="#r2">A SINGLE LINE CARRIES AN EXTRAORDINARY BURDEN · TO INTRIGUE · TO PERSUADE · TO UNSETTLE · TO PROMISE ·</textPath></text>
+          <text><textPath href="#r3">IN A WORLD DEFINED BY ENDLESS SCROLLING · A SINGLE LINE ·</textPath></text>
+          <rect class="dotfill" x="-7" y="-7" width="14" height="14"/>
+          <g class="faint" stroke-width="0.6">
+            <line x1="0" y1="-128" x2="0" y2="-148"/><line x1="128" y1="0" x2="148" y2="0"/>
+            <line x1="0" y1="128" x2="0" y2="148"/><line x1="-128" y1="0" x2="-148" y2="0"/>
+          </g>
+          <text x="0" y="-153" text-anchor="middle" class="figlabel">N — WORK</text>
+          <text x="152" y="3" class="figlabel">E — NOTES</text>
+          <text x="0" y="160" text-anchor="middle" class="figlabel">S — AUTHOR</text>
+          <text x="-152" y="3" text-anchor="end" class="figlabel">W — CONTACT</text>
+        </g>
+        <text class="figlabel" x="12" y="320">FIG. C — MANIFESTO RINGS · TEXT ORBITS AT READING SPEED · CENTER SQUARE = REPO</text>
+      </svg>
+      <h3>The Rosetta</h3>
+      <p>Your manifesto set in orbit — concentric rings of type slowly counter-rotating around a small solid square, in the mirror-mandala spirit of the reference pair. Rings drift apart as the cursor nears; the four compass points and the center square are the five routes.</p>
+      <div class="mech"><b>Navigation:</b> click a compass point → its ring unwinds into a straight line of text that becomes the destination page's opening sentence.</div>
+    </div>
+
+    <!-- PLATE D — ORB -->
+    <div class="plate" data-choice="D" onclick="sel(this)">
+      <div class="stamp">Selected</div>
+      <div class="plate-head"><span>Plate D</span><span class="latin">Sphaera cogitans</span></div>
+      <svg class="fig" viewBox="0 0 400 330">
+        <g transform="translate(200,165)">
+          <circle class="stroke" r="92" stroke-width="0.8"/>
+          <ellipse class="faint" rx="92" ry="30" stroke-width="0.7"/>
+          <ellipse class="faint" rx="92" ry="62" stroke-width="0.7"/>
+          <ellipse class="faint" rx="30" ry="92" stroke-width="0.7"/>
+          <ellipse class="faint" rx="62" ry="92" stroke-width="0.7"/>
+          <g class="dotfill">
+            <circle cx="-40" cy="-52" r="1.4"/><circle cx="22" cy="-70" r="1.1"/><circle cx="60" cy="-30" r="1.5"/>
+            <circle cx="-66" cy="10" r="1.2"/><circle cx="12" cy="30" r="1.6"/><circle cx="48" cy="58" r="1.1"/>
+            <circle cx="-28" cy="66" r="1.3"/><circle cx="-8" cy="-24" r="1.2"/><circle cx="76" cy="18" r="1.2"/>
+          </g>
+          <ellipse class="stroke" rx="132" ry="44" stroke-dasharray="2 4" stroke-width="0.7" transform="rotate(-18)"/>
+          <g class="dotfill">
+            <circle cx="-125" cy="27" r="3"/><circle cx="-38" cy="-45" r="3"/><circle cx="70" cy="-40" r="3" transform="rotate(-18) translate(60,44) rotate(18)"/>
+            <circle cx="128" cy="-24" r="3"/><circle cx="36" cy="46" r="3"/>
+          </g>
+          <text x="-160" y="42" text-anchor="end">Work</text>
+          <text x="-52" y="-56" text-anchor="end">Notes</text>
+          <text x="140" y="-28">Author</text>
+          <text x="48" y="62">Contact</text>
+          <text x="0" y="118" text-anchor="middle">Repo — core</text>
+        </g>
+        <text class="figlabel" x="12" y="320">FIG. D — THINKING ORB · PARTICLE SPHERE · SATELLITES ON A TILTED ORBIT = ROUTES</text>
+      </svg>
+      <h3>The Cogitator</h3>
+      <p>A monochrome thinking-orb — a dense particle sphere that swirls, breathes, and reacts to the cursor like the Antalik orbs, stripped to grayscale. Five satellite nodes ride a tilted orbit around it, each one a route; the orb's surface currents lean toward whichever satellite you hover.</p>
+      <div class="mech"><b>Navigation:</b> click a satellite → the orb swallows the camera; you pass through the particle field and surface inside the destination page.</div>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    <span>Reply in the terminal — clicks here are local only</span>
+    <span>Doc.001 · Rev.A</span>
+  </div>
+</div>
+
+<script>
+  function sel(el){
+    document.querySelectorAll('.plate').forEach(p => { if(p!==el) p.classList.remove('selected'); });
+    el.classList.toggle('selected');
+  }
+</script>
+</body>
+</html>

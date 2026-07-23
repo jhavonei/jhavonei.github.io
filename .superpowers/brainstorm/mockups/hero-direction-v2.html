@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JHAVONEI — DOC.001 REV.B — THE SPECIMEN ROSETTA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Archivo+Narrow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #c8c8c4;
+    --ink-strong: #efefec;
+    --ink-faint: rgba(200,200,196,0.38);
+    --hairline: rgba(200,200,196,0.16);
+    --hairline-strong: rgba(200,200,196,0.34);
+    --paper: #0a0a0a;
+    --paper-raise: #101010;
+    --dot: rgba(200,200,196,0.10);
+    --accent: #efefec;
+  }
+  html.white {
+    --ink: #1c1c1a;
+    --ink-strong: #0a0a0a;
+    --ink-faint: rgba(28,28,26,0.42);
+    --hairline: rgba(28,28,26,0.18);
+    --hairline-strong: rgba(28,28,26,0.38);
+    --paper: #e9e7e2;
+    --paper-raise: #efede8;
+    --dot: rgba(28,28,26,0.12);
+    --accent: #0a0a0a;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    line-height: 1.55;
+    letter-spacing: 0.02em;
+    background-image: radial-gradient(var(--dot) 1px, transparent 1px);
+    background-size: 26px 26px;
+    transition: background-color .6s ease, color .6s ease;
+    min-height: 100vh;
+  }
+  body::after {
+    content:""; position:fixed; inset:0; pointer-events:none; z-index:50;
+    opacity:.5; mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E");
+  }
+  .sheet { max-width:1080px; margin:0 auto; padding:28px 34px 70px; }
+  .row {
+    display:flex; justify-content:space-between; align-items:baseline;
+    border-bottom:1px solid var(--hairline-strong);
+    padding:6px 2px; text-transform:uppercase;
+    color:var(--ink-strong); font-weight:500;
+  }
+  .row .mid { color:var(--ink-faint); font-weight:300; }
+  .row.sub { color:var(--ink); font-weight:400; border-bottom-color:var(--hairline); }
+  .toggle {
+    cursor:pointer; user-select:none; border:1px solid var(--hairline-strong);
+    padding:2px 10px; font:inherit; background:transparent; color:var(--ink-strong);
+    text-transform:uppercase; letter-spacing:.12em;
+  }
+  .toggle:hover { background:var(--ink-strong); color:var(--paper); }
+
+  .stage { position:relative; margin:10px auto 0; max-width:820px; }
+  .fig { display:block; width:100%; height:auto; }
+  .fig text { font-family:'IBM Plex Mono',monospace; font-size:8px; letter-spacing:.14em; fill:var(--ink-faint); text-transform:uppercase; }
+  .fig .figlabel { fill:var(--ink); font-size:7.5px; }
+  .fig .ringtext { font-size:9.5px; fill:var(--ink-faint); letter-spacing:.3em; }
+  .fig .stroke { stroke:var(--ink); fill:none; }
+  .fig .faint  { stroke:var(--hairline-strong); fill:none; }
+  .fig .dotfill{ fill:var(--ink); }
+
+  .spin      { transform-box: fill-box; transform-origin: center; animation: spin 140s linear infinite; }
+  .spin.rev  { animation: spinrev 100s linear infinite; }
+  .spin.slow { animation-duration: 200s; }
+  @keyframes spin    { to { transform: rotate(360deg); } }
+  @keyframes spinrev { to { transform: rotate(-360deg); } }
+  .breathe { transform-box: fill-box; transform-origin: center; animation: breathe 7s ease-in-out infinite; }
+  @keyframes breathe { 0%,100% { transform: scale(1); } 50% { transform: scale(1.025); } }
+
+  .caption {
+    max-width:640px; margin:18px auto 0; text-align:center;
+    color:var(--ink-faint); text-transform:uppercase; letter-spacing:.08em; font-size:11px;
+  }
+  .caption b { color:var(--ink); font-weight:500; }
+  .legend {
+    max-width:760px; margin:30px auto 0; border-top:1px dashed var(--hairline);
+    padding-top:14px; display:grid; grid-template-columns:1fr 1fr; gap:6px 40px; font-size:11.5px;
+  }
+  .legend div b { color:var(--ink-strong); font-weight:500; }
+  .footer {
+    margin-top:44px; border-top:1px solid var(--hairline-strong);
+    padding-top:8px; display:flex; justify-content:space-between;
+    text-transform:uppercase; font-size:10.5px; letter-spacing:.14em; color:var(--ink-faint);
+  }
+  .reg { position:fixed; width:5px; height:5px; background:var(--ink-faint); z-index:1; }
+</style>
+</head>
+<body>
+<div class="reg" style="top:14%; left:4%"></div>
+<div class="reg" style="top:72%; left:3%; width:4px;height:4px"></div>
+<div class="reg" style="top:20%; right:4%"></div>
+<div class="reg" style="top:82%; right:6%; width:4px;height:4px"></div>
+
+<div class="sheet">
+  <div class="row">
+    <span>JHAVONEI</span><span class="mid">THE SPECIMEN ROSETTA — FUSION OF PLATES A + C</span><span>2026</span>
+  </div>
+  <div class="row sub">
+    <span>DOC.001 · REV.B</span>
+    <span class="mid">FULL LILY RETAINED · MANIFESTO IN ORBIT</span>
+    <button class="toggle" onclick="document.documentElement.classList.toggle('white')">BLACK ⇄ WHITE</button>
+  </div>
+
+  <div class="stage">
+    <svg class="fig" viewBox="0 0 820 660">
+      <g transform="translate(410,330)">
+
+        <!-- ═══ MANIFESTO RINGS (Plate C) — counter-rotating, wreathing the specimen ═══ -->
+        <defs>
+          <path id="ring1" d="M0,-282 A282,282 0 1,1 -0.01,-282"/>
+          <path id="ring2" d="M0,-252 A252,252 0 1,1 -0.01,-252"/>
+          <path id="ring3" d="M0,-224 A224,224 0 1,1 -0.01,-224"/>
+        </defs>
+        <g class="spin slow">
+          <text class="ringtext"><textPath href="#ring1">OPENING LINES ARE MORE IMPORTANT THAN YOU THINK · THEY ARE NOT MERELY THE BEGINNING OF A SENTENCE BUT THE BEGINNING OF A RELATIONSHIP BETWEEN WRITER AND READER ·</textPath></text>
+        </g>
+        <g class="spin rev">
+          <text class="ringtext"><textPath href="#ring2">IN A WORLD DEFINED BY ENDLESS SCROLLING AND FRACTURED ATTENTION · A SINGLE LINE CARRIES AN EXTRAORDINARY BURDEN ·</textPath></text>
+        </g>
+        <g class="spin">
+          <text class="ringtext"><textPath href="#ring3">TO INTRIGUE · TO PERSUADE · TO UNSETTLE · OR TO PROMISE · THE FINEST OPENING LINES LINGER IN MEMORY ·</textPath></text>
+        </g>
+        <circle class="faint" r="296" stroke-dasharray="1 6" stroke-width="0.7"/>
+        <circle class="faint" r="208" stroke-width="0.5"/>
+
+        <!-- ═══ THE FULL LILY (Plate A) — 6 petals, 6 stamens, breathing ═══ -->
+        <g class="breathe">
+          <!-- petals -->
+          <g class="stroke" stroke-width="0.9">
+            <g><path d="M0,0 C 13,-42 20,-88 3,-130 C -15,-88 -10,-42 0,0"/><path class="faint" d="M0,-10 L0,-120"/><path class="faint" d="M2,-30 C 6,-55 8,-80 2,-105"/><path class="faint" d="M-2,-30 C -6,-55 -8,-80 -2,-105"/></g>
+            <g transform="rotate(60)"><path d="M0,0 C 13,-42 20,-88 3,-130 C -15,-88 -10,-42 0,0"/><path class="faint" d="M0,-10 L0,-120"/><path class="faint" d="M2,-30 C 6,-55 8,-80 2,-105"/><path class="faint" d="M-2,-30 C -6,-55 -8,-80 -2,-105"/></g>
+            <g transform="rotate(120)"><path d="M0,0 C 13,-42 20,-88 3,-130 C -15,-88 -10,-42 0,0"/><path class="faint" d="M0,-10 L0,-120"/><path class="faint" d="M2,-30 C 6,-55 8,-80 2,-105"/><path class="faint" d="M-2,-30 C -6,-55 -8,-80 -2,-105"/></g>
+            <g transform="rotate(180)"><path d="M0,0 C 13,-42 20,-88 3,-130 C -15,-88 -10,-42 0,0"/><path class="faint" d="M0,-10 L0,-120"/><path class="faint" d="M2,-30 C 6,-55 8,-80 2,-105"/><path class="faint" d="M-2,-30 C -6,-55 -8,-80 -2,-105"/></g>
+            <g transform="rotate(240)"><path d="M0,0 C 13,-42 20,-88 3,-130 C -15,-88 -10,-42 0,0"/><path class="faint" d="M0,-10 L0,-120"/><path class="faint" d="M2,-30 C 6,-55 8,-80 2,-105"/><path class="faint" d="M-2,-30 C -6,-55 -8,-80 -2,-105"/></g>
+            <g transform="rotate(300)"><path d="M0,0 C 13,-42 20,-88 3,-130 C -15,-88 -10,-42 0,0"/><path class="faint" d="M0,-10 L0,-120"/><path class="faint" d="M2,-30 C 6,-55 8,-80 2,-105"/><path class="faint" d="M-2,-30 C -6,-55 -8,-80 -2,-105"/></g>
+          </g>
+          <!-- 6 stamens: 5 routes + 1 inverter -->
+          <g class="stroke" stroke-width="0.8">
+            <path d="M0,0 C 38,-62 78,-115 120,-148"/><circle class="dotfill" cx="120" cy="-148" r="2.6" stroke="none"/>
+            <path d="M0,0 C 69,-22 125,-40 172,-43"/><circle class="dotfill" cx="172" cy="-43" r="2.6" stroke="none"/>
+            <path d="M0,0 C 50,52 95,92 130,115"/><circle class="dotfill" cx="130" cy="115" r="2.6" stroke="none"/>
+            <path d="M0,0 C -50,52 -95,92 -130,115"/><circle class="dotfill" cx="-130" cy="115" r="2.6" stroke="none"/>
+            <path d="M0,0 C -69,-22 -125,-40 -172,-43"/><circle class="dotfill" cx="-172" cy="-43" r="2.6" stroke="none"/>
+            <path d="M0,0 C -38,-62 -78,-115 -120,-148"/>
+            <circle class="stroke" cx="-120" cy="-148" r="2.6" stroke-width="0.9"/>
+          </g>
+          <circle class="stroke" r="4.5" stroke-width="0.9"/>
+        </g>
+
+        <!-- figure callouts at stamen tips -->
+        <g class="faint" stroke-width="0.6">
+          <line x1="120" y1="-148" x2="168" y2="-168"/>
+          <line x1="172" y1="-43" x2="214" y2="-50"/>
+          <line x1="130" y1="115" x2="176" y2="132"/>
+          <line x1="-130" y1="115" x2="-176" y2="132"/>
+          <line x1="-172" y1="-43" x2="-214" y2="-50"/>
+          <line x1="-120" y1="-148" x2="-168" y2="-168"/>
+        </g>
+        <text x="172" y="-165" class="figlabel">Fig.01 — Work</text>
+        <text x="218" y="-47" class="figlabel">Fig.02 — Field Notes</text>
+        <text x="180" y="136" class="figlabel">Fig.03 — The Author</text>
+        <text x="-180" y="136" text-anchor="end" class="figlabel">Fig.04 — Correspondence</text>
+        <text x="-218" y="-47" text-anchor="end" class="figlabel">Fig.05 — Repository</text>
+        <text x="-172" y="-165" text-anchor="end" class="figlabel">Fig.00 — Invert ⇄</text>
+
+      </g>
+      <text class="figlabel" x="14" y="648">FIG. 1 — LYCORIS RADIATA IN ROSETTA · 50,000 PTS · SIX STAMENS: FIVE ROUTES + ONE INVERTER · RINGS COUNTER-ROTATE AT READING SPEED</text>
+    </svg>
+  </div>
+
+  <p class="caption">
+    The full lily, retained, breathing at center — wreathed by <b>three counter-rotating rings of your manifesto</b>.
+    The rings are the aura; the lily is the instrument. The hollow-tipped sixth stamen (<b>Fig.00</b>)
+    doesn't route anywhere — it inverts the world, BLACK ⇄ WHITE.
+  </p>
+
+  <div class="legend">
+    <div><b>Idle:</b> lily breathes; rings orbit at reading speed; particles shiver from the cursor exactly as in WovenLight.</div>
+    <div><b>Hover a stamen:</b> that filament brightens, its ring segment slows so the nearest phrase becomes legible, callout label types itself out.</div>
+    <div><b>Click a route stamen:</b> the bloom disintegrates; particles + the unwinding ring text stream into the destination page, where the text becomes its opening line.</div>
+    <div><b>Click Fig.00:</b> the entire document inverts — the BLACK/WHITE twin — with the lily as the eclipse that wipes the tone across the page.</div>
+  </div>
+
+  <div class="footer">
+    <span>Reply in the terminal — confirm or mutate further</span>
+    <span>Doc.001 · Rev.B</span>
+  </div>
+</div>
+</body>
+</html>
