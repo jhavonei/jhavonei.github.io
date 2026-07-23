@@ -1,0 +1,86 @@
+/* ── tokens: BLACK (canonical) ── */
+:root {
+  --paper: #0a0a0a;
+  --paper-raise: #101010;
+  --ink: #c8c8c4;
+  --ink-strong: #efefec;
+  --ink-faint: rgba(200, 200, 196, 0.38);
+  --hairline: rgba(200, 200, 196, 0.16);
+  --hairline-strong: rgba(200, 200, 196, 0.34);
+  --dot: rgba(200, 200, 196, 0.1);
+  --accent: #efefec;
+  --ease-reveal: cubic-bezier(0.2, 0.65, 0.3, 0.9);
+  --ease-wipe: cubic-bezier(0.7, 0, 0.2, 1);
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+  --font-display: 'Archivo Narrow', sans-serif;
+}
+/* ── WHITE twin ── */
+html.white {
+  --paper: #e9e7e2;
+  --paper-raise: #efede8;
+  --ink: #1c1c1a;
+  --ink-strong: #0a0a0a;
+  --ink-faint: rgba(28, 28, 26, 0.42);
+  --hairline: rgba(28, 28, 26, 0.18);
+  --hairline-strong: rgba(28, 28, 26, 0.38);
+  --dot: rgba(28, 28, 26, 0.12);
+  --accent: #0a0a0a;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.55;
+  letter-spacing: 0.02em;
+  background-image: radial-gradient(var(--dot) 1px, transparent 1px);
+  background-size: 26px 26px;
+  transition: background-color 0.6s ease, color 0.6s ease;
+  min-height: 100vh;
+}
+/* film grain */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 90;
+  opacity: 0.5;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E");
+}
+a { color: var(--ink-strong); text-decoration: none; }
+a:focus-visible, button:focus-visible {
+  outline: 1.5px solid var(--accent);
+  outline-offset: 3px;
+}
+::selection { background: var(--ink-strong); color: var(--paper); }
+
+/* ── shared dossier furniture ── */
+.row {
+  display: flex; justify-content: space-between; align-items: baseline;
+  border-bottom: 1px solid var(--hairline-strong);
+  padding: 6px 2px; text-transform: uppercase;
+  color: var(--ink-strong); font-weight: 500;
+}
+.row .mid { color: var(--ink-faint); font-weight: 300; }
+.row.sub { color: var(--ink); font-weight: 400; border-bottom-color: var(--hairline); }
+.seal {
+  cursor: pointer; user-select: none; border: 1px solid var(--hairline-strong);
+  padding: 2px 10px; font: inherit; background: transparent; color: var(--ink-strong);
+  text-transform: uppercase; letter-spacing: 0.12em;
+}
+.seal:hover { background: var(--ink-strong); color: var(--paper); }
+.display {
+  font-family: var(--font-display); font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.16em;
+  color: var(--ink-strong); line-height: 1;
+}
+.label { font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--ink-faint); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
