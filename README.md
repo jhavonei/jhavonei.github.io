@@ -19,43 +19,25 @@ Push to `main` → GitHub Actions builds and deploys to Pages (custom domain
 `jhavonei.me` via `static/CNAME`). One-time setting: repo → Settings → Pages →
 Source = **GitHub Actions**.
 
-## Domain + email setup (Namecheap — verified state 2026-07-23)
+## Domain + email (Namecheap — verified live 2026-07-23)
 
-DNS is on **Namecheap BasicDNS** (`dns1/dns2.registrar-servers.com`). No
-Cloudflare account is involved. As of the audit the domain had **no A records
-and no MX records** — both must be added for the site and email to work.
+DNS is on **Namecheap BasicDNS** (`dns1/dns2.registrar-servers.com`); no
+Cloudflare involved. Verified working:
 
-### 1. Point jhavonei.me at GitHub Pages
+- **A records** `@` → 185.199.108–111.153 (GitHub Pages) ✓
+- **Pages**: Source = GitHub Actions, custom domain `jhavonei.me`,
+  HTTPS enforced — set via API during launch ✓
+- **Site live** at https://jhavonei.me ✓
+- **MX records**: Namecheap Email Forwarding active
+  (`eforward1–5.registrar-servers.com`) ✓
 
-Namecheap → Domain List → `jhavonei.me` → **Advanced DNS** → Host Records.
-Delete any parking/URL-redirect records, then add:
+**Email check still owed:** MX proves the forwarding *service* is on, not that
+the `contact@` alias exists. In Namecheap → Domain List → `jhavonei.me` →
+Domain tab → *Redirect Email*, confirm there is a row `contact` → your inbox
+(add it if missing), then send a test mail to `contact@jhavonei.me`.
+Forwarding is receive-only; replies go out from your own address.
 
-| Type | Host | Value | TTL |
-|------|------|-------|-----|
-| A | @ | 185.199.108.153 | Automatic |
-| A | @ | 185.199.109.153 | Automatic |
-| A | @ | 185.199.110.153 | Automatic |
-| A | @ | 185.199.111.153 | Automatic |
-| CNAME | www | jhavonei.github.io. | Automatic |
-
-### 2. GitHub Pages settings (one time)
-
-Repo `jhavonei/jhavonei.github.io` → Settings → Pages:
-- **Source: GitHub Actions**
-- **Custom domain: `jhavonei.me`** → Save (required for workflow deploys —
-  the `static/CNAME` file alone is not honored by Actions-based Pages)
-- After DNS propagates (minutes–hours): tick **Enforce HTTPS**
-
-### 3. Email `contact@jhavonei.me` → Gmail
-
-Namecheap → Domain List → `jhavonei.me` → **Domain** tab → *Redirect Email*:
-add `contact` → your Gmail, Save. Namecheap then auto-adds its
-`eforward*.registrar-servers.com` MX records under Advanced DNS
-(Mail Settings switches to "Email Forwarding"). Verify with:
-`Resolve-DnsName jhavonei.me -Type MX` — non-empty means it took.
-Note: forwarding is receive-only; replies come from your Gmail address.
-
-### 4. Remaining owner setup
+### Remaining owner setup
 
 1. **Form**: create a free Formspree form, paste its endpoint into
    `formspreeEndpoint` in `src/lib/config/site.ts`. Empty endpoint = form
